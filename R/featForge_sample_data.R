@@ -1,0 +1,36 @@
+#' Sample Data for Package Testing and Demonstration
+#'
+#' A dataset containing auto-generated values for package testing and demonstration purposes.
+#' This example dataset consists of 30 rows and 7 variables that illustrate the structure
+#' of a typical application record.
+#'
+#' The dataset includes the following variables:
+#'
+#' \describe{
+#'   \item{application_id}{A unique numeric identifier for each application.}
+#'   \item{application_created_at}{The date and time when the application was created.}
+#'   \item{client_name}{The first name of the client.}
+#'   \item{client_surname}{The last name of the client.}
+#'   \item{date_of_birth}{The client’s date of birth.}
+#'   \item{email}{The client’s email address.}
+#'   \item{ip}{The IP address associated with the client.}
+#' }
+#'
+#' @docType data
+#' @keywords datasets
+#' @name featForge_sample_data
+#' @usage data(featForge_sample_data)
+#' @format A data frame with 30 rows and 7 variables.
+#'
+#' @details
+#' This dataset was automatically generated for the purpose of testing and demonstrating
+#' the package functionality. The values (e.g., dates, emails, and IP addresses) are illustrative
+#' and do not represent actual user data.
+#'
+#' @examples
+#' # Load the dataset
+#' data(featForge_sample_data)
+#'
+#' # Display the first few rows of the dataset
+#' head(featForge_sample_data)
+"featForge_sample_data"
