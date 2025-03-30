@@ -11,7 +11,7 @@ A data frame with 30 rows and 7 variables.
 data(featForge_sample_data)
 }
 \description{
-A dataset containing auto-generated values for package testing and demonstration purposes.
+A dataset containing auto-generated values by ChatGPT o3-mini-high for package testing and demonstration purposes.
 This example dataset consists of 30 rows and 7 variables that illustrate the structure
 of a typical application record.
 }
