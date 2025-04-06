@@ -17,6 +17,8 @@
 #'   \code{id_col}, \code{time_col}, and \code{amount_col} (or any numeric variable to aggregate).
 #' @param id_col A character string specifying the column name used to define the aggregation level (e.g., \code{"application_id"},
 #'   \code{"client_id"}, or \code{"agreement_id"}).
+#' @param amount_col A character string specifying the column in \code{data} that contains the numeric variable to be aggregated.
+#'   This variable can represent transaction amounts, loan repayment values, credit bureau inquiry counts, or any other numeric measure.
 #' @param time_col A character string indicating the column name that contains the date (or timestamp) when the event occurred.
 #'   This column must be of class \code{Date} or \code{POSIXct}.
 #' @param group_cols An optional character vector of column names by which to further subdivide the aggregation.
@@ -69,7 +71,7 @@
 #'                        ops = list(
 #'                          avg_momnthly_outgoing_transactions = mean,
 #'                          last_month_transactions_amount = function(x) x[length(x)],
-#'                          # In the aggregated numeric vector, the last observation represents the most recent period.
+#' # In the aggregated numeric vector, the last observation represents the most recent period.
 #'                          last_month_transaction_amount_vs_mean = function(x) x[length(x)] / mean(x)
 #'                        ),
 #'                        period = 'monthly',
@@ -94,7 +96,8 @@
 #'                        scrape_date_col = 'scrape_date'
 #' )
 #'
-#' # Example 3: Aggregate using a custom numeric period: 30-day cycles for 3 consecutive cycles (i.e., the last 90 days).
+#' # Example 3: Aggregate using a custom numeric period:
+#' # 30-day cycles for 3 consecutive cycles (i.e., the last 90 days).
 #' aggregate_applications(featForge_transactions,
 #'                        id_col = 'application_id',
 #'                        amount_col = 'amount',
@@ -159,6 +162,10 @@ aggregate_applications <- function(data,
   if(!is.null(time_col)) {
     validate_col(time_col, data, "time_col")
 
+    if(anyNA(data[[time_col]])) {
+      stop(sprintf("Missing values are not permitted in column '%s'", time_col))
+    }
+
     # Check that the timestamp column is of class Date or POSIXct.
     if (!inherits(data[[time_col]], c("Date", "POSIXct"))) {
       stop(sprintf("The column '%s' must be of class Date or POSIXct.", time_col))
@@ -213,7 +220,7 @@ aggregate_applications <- function(data,
 
       data[[observation_window_start_col]] <- as.Date(data[[observation_window_start_col]])
 
-      check_scrape <- aggregate(data[[scrape_date_col]],
+      check_scrape <- stats::aggregate(data[[scrape_date_col]],
                                 by = list(data[[id_col]]),
                                 FUN = function(x) length(unique(x)))
       if (any(check_scrape[[2]] > 1)) {
@@ -223,7 +230,7 @@ aggregate_applications <- function(data,
         stop("NA values found in `scrape_date_col` but that column does not permit NAs.")
       }
 
-      check_obs <- aggregate(data[[observation_window_start_col]],
+      check_obs <- stats::aggregate(data[[observation_window_start_col]],
                              by = list(data[[id_col]]),
                              FUN = function(x) length(unique(x)))
       if (any(check_obs[[2]] > 1)) {
@@ -236,6 +243,9 @@ aggregate_applications <- function(data,
   } else if (is.numeric(period) && length(period) == 2) {
     if (is.null(scrape_date_col) || is.null(time_col)) {
       stop("For numeric period vector, both, `scrape_date_col` and `time_col`, must be provided.")
+    }
+    if (any(data[[time_col]] > data[[scrape_date_col]])) {
+      stop("Some transaction dates are later than their corresponding scrape_date. Please check your data for inconsistencies.")
     }
     validate_col(scrape_date_col, data, "scrape_date_col")
     if (!inherits(data[[scrape_date_col]], c("Date", "POSIXct"))) {
@@ -318,7 +328,7 @@ aggregate_applications <- function(data,
         res_list <- lapply(all_groups, function(g_val) {
           df_grp <- df_app[df_app[[g_col]] == g_val, ]
           if (nrow(df_grp) == 0) {
-            res <- setNames(as.list(rep(0, length(ops))), names(ops))
+            res <- stats::setNames(as.list(rep(0, length(ops))), names(ops))
           } else {
 
             if(!do_period_aggregation) {
@@ -327,9 +337,9 @@ aggregate_applications <- function(data,
               # Use the attribute from the full application rather than the subset.
               all_periods <- attr(df_app, "all_periods")
               if (is.null(all_periods) || length(all_periods) == 0) {
-                res <- setNames(as.list(rep(NA, length(ops))), names(ops))
+                res <- stats::setNames(as.list(rep(NA, length(ops))), names(ops))
               } else {
-                agg_df <- aggregate(df_grp[[amount_col]],
+                agg_df <- stats::aggregate(df_grp[[amount_col]],
                                     by = list(period = df_grp$period_group),
                                     FUN = period_agg)
                 agg_df$period <- as.Date(agg_df$period)
@@ -353,7 +363,7 @@ aggregate_applications <- function(data,
       # Combine results across all grouping columns.
       combined_groups <- do.call(c, group_results_list)
       # Create a one-row data frame with the application id and all aggregated features.
-      result_row <- c(setNames(list(app_id), id_col), combined_groups)
+      result_row <- c(stats::setNames(list(app_id), id_col), combined_groups)
       as.data.frame(result_row, stringsAsFactors = FALSE)
     }))
 
@@ -364,9 +374,9 @@ aggregate_applications <- function(data,
       } else {
         all_periods <- attr(df_app, "all_periods")
         if (is.null(all_periods) || length(all_periods) == 0) {
-          op_results <- setNames(as.list(rep(NA, length(ops))), names(ops))
+          op_results <- stats::setNames(as.list(rep(NA, length(ops))), names(ops))
         } else {
-          agg_df <- aggregate(df_app[[amount_col]],
+          agg_df <- stats::aggregate(df_app[[amount_col]],
                               by = list(period = df_app$period_group),
                               FUN = period_agg)
           agg_df$period <- as.Date(agg_df$period)
@@ -389,7 +399,22 @@ aggregate_applications <- function(data,
 
 
 
-# Helper functions for input validation
+#' Validate a Single Column Name
+#'
+#' Checks that the provided column name is a single character string and that it exists in the given data frame.
+#'
+#' @param colname A character string representing the column name to validate.
+#' @param df A data frame in which the column name should exist.
+#' @param arg_name A character string indicating the name of the argument (used in error messages).
+#'
+#' @return Invisibly returns \code{NULL} if the check passes.
+#'
+#' @examples
+#' # Assuming df is a data frame with a column named "client_id"
+#' validate_col("client_id", df, "id_col")
+#'
+#' @keywords internal
+#' @noRd
 validate_col <- function(colname, df, arg_name) {
   if (!is.character(colname) || length(colname) != 1) {
     stop(sprintf("`%s` must be a single string.", arg_name))
@@ -400,6 +425,22 @@ validate_col <- function(colname, df, arg_name) {
   }
 }
 
+#' Validate a Vector of Column Names
+#'
+#' Checks that the provided vector of column names is of type character and that all specified columns exist in the data frame.
+#'
+#' @param col_vec A character vector containing column names to validate.
+#' @param df A data frame in which the columns should exist.
+#' @param arg_name A character string indicating the name of the argument (used in error messages).
+#'
+#' @return Invisibly returns \code{NULL} if all checks pass.
+#'
+#' @examples
+#' # Assuming df is a data frame with columns "client_id" and "transaction_date"
+#' validate_col_vector(c("client_id", "transaction_date"), df, "group_cols")
+#'
+#' @keywords internal
+#' @noRd
 validate_col_vector <- function(col_vec, df, arg_name) {
   if (!is.character(col_vec)) {
     stop(sprintf("`%s` must be a character vector.", arg_name))
@@ -428,7 +469,8 @@ validate_col_vector <- function(col_vec, df, arg_name) {
 #'   \code{period_group}: a vector (of the same length as time_vec) with the period label
 #'   for each transaction (or NA if the transaction does not fall in a full period).
 #'   \code{all_periods}: a sorted vector of all complete periods available.
-#'
+#' @keywords internal
+#' @noRd
 compute_period_grouping <- function(time_vec, scrape_date, obs_start, period) {
   # Ensure proper date types
   time_vec    <- as.Date(time_vec)

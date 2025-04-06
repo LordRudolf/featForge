@@ -221,8 +221,9 @@ extract_basic_description_features <- function(descriptions) {
 #'                extract_keyword_features(featForge_transactions$description))
 #' head(trans) # we see that there have been added categories named "casino" and "utilities".
 #'
-#' # Aggregate the number of transactions on the application level by summing the binary keyword indicators
-#' # for the 'casino' and 'utilities' columns, using a 30-day period.
+#' # Aggregate the number of transactions on the application level
+#' # by summing the binary keyword indicators for the 'casino' and
+#' # 'utilities' columns, using a 30-day period.
 #' aggregate_applications(
 #'   trans,
 #'   id_col = "application_id",
@@ -268,7 +269,7 @@ extract_keyword_features <- function(descriptions, min_freq = 1, use_matrix = TR
   vocabulary <- names(word_freq)[word_freq >= min_freq]
 
   # Create a mapping from word to column index
-  vocab_map <- setNames(seq_along(vocabulary), vocabulary)
+  vocab_map <- stats::setNames(seq_along(vocabulary), vocabulary)
   V <- length(vocabulary)
 
   if (V == 0) {
@@ -425,9 +426,11 @@ extract_keyword_features <- function(descriptions, min_freq = 1, use_matrix = TR
 #' data(featForge_transactions)
 #'
 #' # In this example, the 'description' field is parsed for keywords.
-#' # Since the 'amount' column is provided, each keyword indicator is weighted by the transaction amount,
-#' # and transactions are automatically split into incoming and outgoing via the 'direction' column.
-#' # Additionally, the period is specified as c(30, 1), meaning only transactions occurring within the last 30 days
+#' # Since the 'amount' column is provided, each keyword indicator is
+#' # weighted by the transaction amount, and transactions are
+#' # automatically split into incoming and outgoing via the 'direction' column.
+#' # Additionally, the period is specified as c(30, 1), meaning only
+#' # transactions occurring within the last 30 days.
 #' # (scrape_date - 30 to scrape_date) are considered.
 #' result <- aggregate_psd2_keyword_features(
 #'   data = featForge_transactions,
@@ -444,9 +447,13 @@ extract_keyword_features <- function(descriptions, min_freq = 1, use_matrix = TR
 #'   convert_to_df = TRUE
 #' )
 #'
-#' # The resulting data frame 'result' contains one row per application with aggregated keyword features.
-#' # For example, if keywords "casino" and "utilities" were detected, aggregated columns might be named:
-#' # "casino_amount_direction_in", "casino_amount_direction_out", "utilities_amount_direction_in", etc.
+#' # The resulting data frame 'result' contains one
+#' # row per application with aggregated keyword features.
+#' # For example, if keywords "casino" and "utilities" were detected,
+#' # aggregated columns might be named:
+#' # "casino_amount_direction_in",
+#' # "casino_amount_direction_out",
+#' # "utilities_amount_direction_in", etc.
 #' result
 #' }
 #'
@@ -560,7 +567,7 @@ aggregate_psd2_keyword_features <- function(data,
   final_agg <- Reduce(function(x, y) merge(x, y, by = id_col, all = TRUE), agg_results_list)
 
   # Merge with the full list of original application IDs, filling missing rows with zeros.
-  full_ids_df <- setNames(data.frame(orig_ids, stringsAsFactors = FALSE), id_col)
+  full_ids_df <- stats::setNames(data.frame(orig_ids, stringsAsFactors = FALSE), id_col)
   final_agg_full <- merge(full_ids_df, final_agg, by = id_col, all.x = TRUE)
 
   # Replace NA aggregated values with 0.

@@ -61,8 +61,9 @@ trans <- cbind(featForge_transactions,
                extract_keyword_features(featForge_transactions$description))
 head(trans) # we see that there have been added categories named "casino" and "utilities".
 
-# Aggregate the number of transactions on the application level by summing the binary keyword indicators
-# for the 'casino' and 'utilities' columns, using a 30-day period.
+# Aggregate the number of transactions on the application level
+# by summing the binary keyword indicators for the 'casino' and
+# 'utilities' columns, using a 30-day period.
 aggregate_applications(
   trans,
   id_col = "application_id",

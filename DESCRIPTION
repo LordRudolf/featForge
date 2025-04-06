@@ -7,8 +7,13 @@ Depends: R (>= 3.5.0)
 Imports:
     stats,
     utils
-Suggests: testthat, stringdist, iptools
+Suggests: 
+    testthat (>= 3.0.0),
+    stringdist,
+    iptools,
+    Matrix
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.1
+Config/testthat/edition: 3

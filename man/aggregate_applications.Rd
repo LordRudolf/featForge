@@ -25,6 +25,9 @@ aggregate_applications(
 \item{id_col}{A character string specifying the column name used to define the aggregation level (e.g., \code{"application_id"},
 \code{"client_id"}, or \code{"agreement_id"}).}
 
+\item{amount_col}{A character string specifying the column in \code{data} that contains the numeric variable to be aggregated.
+This variable can represent transaction amounts, loan repayment values, credit bureau inquiry counts, or any other numeric measure.}
+
 \item{time_col}{A character string indicating the column name that contains the date (or timestamp) when the event occurred.
 This column must be of class \code{Date} or \code{POSIXct}.}
 
@@ -99,7 +102,7 @@ aggregate_applications(featForge_transactions[featForge_transactions$amount < 0,
                        ops = list(
                          avg_momnthly_outgoing_transactions = mean,
                          last_month_transactions_amount = function(x) x[length(x)],
-                         # In the aggregated numeric vector, the last observation represents the most recent period.
+# In the aggregated numeric vector, the last observation represents the most recent period.
                          last_month_transaction_amount_vs_mean = function(x) x[length(x)] / mean(x)
                        ),
                        period = 'monthly',
@@ -124,7 +127,8 @@ aggregate_applications(featForge_transactions,
                        scrape_date_col = 'scrape_date'
 )
 
-# Example 3: Aggregate using a custom numeric period: 30-day cycles for 3 consecutive cycles (i.e., the last 90 days).
+# Example 3: Aggregate using a custom numeric period:
+# 30-day cycles for 3 consecutive cycles (i.e., the last 90 days).
 aggregate_applications(featForge_transactions,
                        id_col = 'application_id',
                        amount_col = 'amount',

@@ -129,9 +129,11 @@ The function performs the following steps:
 data(featForge_transactions)
 
 # In this example, the 'description' field is parsed for keywords.
-# Since the 'amount' column is provided, each keyword indicator is weighted by the transaction amount,
-# and transactions are automatically split into incoming and outgoing via the 'direction' column.
-# Additionally, the period is specified as c(30, 1), meaning only transactions occurring within the last 30 days
+# Since the 'amount' column is provided, each keyword indicator is
+# weighted by the transaction amount, and transactions are
+# automatically split into incoming and outgoing via the 'direction' column.
+# Additionally, the period is specified as c(30, 1), meaning only
+# transactions occurring within the last 30 days.
 # (scrape_date - 30 to scrape_date) are considered.
 result <- aggregate_psd2_keyword_features(
   data = featForge_transactions,
@@ -148,9 +150,13 @@ result <- aggregate_psd2_keyword_features(
   convert_to_df = TRUE
 )
 
-# The resulting data frame 'result' contains one row per application with aggregated keyword features.
-# For example, if keywords "casino" and "utilities" were detected, aggregated columns might be named:
-# "casino_amount_direction_in", "casino_amount_direction_out", "utilities_amount_direction_in", etc.
+# The resulting data frame 'result' contains one
+# row per application with aggregated keyword features.
+# For example, if keywords "casino" and "utilities" were detected,
+# aggregated columns might be named:
+# "casino_amount_direction_in",
+# "casino_amount_direction_out",
+# "utilities_amount_direction_in", etc.
 result
 }
 

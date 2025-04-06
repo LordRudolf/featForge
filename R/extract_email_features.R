@@ -266,7 +266,7 @@ extract_email_features <- function(emails,
     res$email_name_in_email_dist_lv <- mapply(
       function(u, nm) {
         if (is.na(u) || is.na(nm)) return(NA)
-        adist(tolower(u), tolower(nm), ignore.case = TRUE)
+        utils::adist(tolower(u), tolower(nm), ignore.case = TRUE)
       },
       username, client_name
     )
@@ -294,7 +294,7 @@ extract_email_features <- function(emails,
     res$email_surname_in_email_dist_lv <- mapply(
       function(u, nm) {
         if (is.na(u) || is.na(nm)) return(NA)
-        adist(tolower(u), tolower(nm), ignore.case = TRUE)
+        utils::adist(tolower(u), tolower(nm), ignore.case = TRUE)
       },
       username, client_surname
     )
@@ -314,7 +314,7 @@ extract_email_features <- function(emails,
     res$email_fullname_in_email_dist_lv <- mapply(
       function(u, nm) {
         if (is.na(u) || is.na(nm)) return(NA)
-        adist(tolower(u), tolower(nm), ignore.case = TRUE)
+        utils::adist(tolower(u), tolower(nm), ignore.case = TRUE)
       },
       username, full_name
     )
