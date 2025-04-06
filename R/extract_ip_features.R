@@ -18,7 +18,7 @@
 #'   \item{\code{ip_v4_octet4_has_leading_zero}}{An integer flag indicating whether the fourth octet includes a leading zero.}
 #'   \item{\code{ip_leading_zero_count}}{An integer count of how many octets in an IPv4 address contain leading zeros.}
 #'   \item{\code{ip_v4_numeric_vector}}{The 32-bit integer representation of an IPv4 address, computed as \eqn{(A * 256^3) + (B * 256^2) + (C * 256) + D}.}
-#'   \item{\code{ip_v6_numeric_approx_vector}}{An approximate numeric conversion of an IPv6 address. This value is computed from the eight hextets and is intended for interval comparisons only; precision may be lost for large values (above 2^{53}).}
+#'   \item{\code{ip_v6_numeric_approx_vector}}{An approximate numeric conversion of an IPv6 address. This value is computed from the eight hextets and is intended for interval comparisons only; precision may be lost for large values (above 2^53).}
 #'   \item{\code{ip_is_palindrome}}{An integer value indicating whether the entire IP address string is a palindrome (i.e., it reads the same forwards and backwards).}
 #'   \item{\code{ip_entropy}}{A numeric value representing the Shannon entropy of the IP address string, computed over the distribution of its characters. Higher entropy values indicate a more varied (less repetitive) pattern.}
 #'   \item{\code{ip_is_multicast}}{An integer flag that indicates if the IP address falls within a multicast range.}
@@ -154,66 +154,72 @@ extract_ip_features <- function(ip_addresses, error_on_invalid = FALSE) {
   ## Octet level features
   octet_list <- strsplit(ip_addresses[is_ipv4], "\\.")
 
-  octet_matrix <- do.call(rbind, lapply(octet_list, as.integer))
+  if(length(octet_list) > 0) {
+    octet_matrix <- do.call(rbind, lapply(octet_list, as.integer))
 
-  leading_zero_matrix <- do.call(rbind, lapply(octet_list, function(x) {
-    sapply(x, function(oct) {
-      nchar(oct) > 1 && substr(oct, 1, 1) == "0"
-    })
-  }))
+    leading_zero_matrix <- do.call(rbind, lapply(octet_list, function(x) {
+      sapply(x, function(oct) {
+        nchar(oct) > 1 && substr(oct, 1, 1) == "0"
+      })
+    }))
 
-  res$ip_v4_octet1 <- NA_integer_
-  res$ip_v4_octet2 <- NA_integer_
-  res$ip_v4_octet3 <- NA_integer_
-  res$ip_v4_octet4 <- NA_integer_
+    res$ip_v4_octet_1 <- NA_integer_
+    res$ip_v4_octet_2 <- NA_integer_
+    res$ip_v4_octet_3 <- NA_integer_
+    res$ip_v4_octet_4 <- NA_integer_
 
-  res$ip_v4_octet1_has_leading_zero <- NA_integer_
-  res$ip_v4_octet2_has_leading_zero <- NA_integer_
-  res$ip_v4_octet3_has_leading_zero <- NA_integer_
-  res$ip_v4_octet4_has_leading_zero <- NA_integer_
+    res$ip_v4_octet_1_has_leading_zero <- NA_integer_
+    res$ip_v4_octet_2_has_leading_zero <- NA_integer_
+    res$ip_v4_octet_3_has_leading_zero <- NA_integer_
+    res$ip_v4_octet_4_has_leading_zero <- NA_integer_
 
-  res$ip_v4_octet_1[is_ipv4] <- octet_matrix[, 1]
-  res$ip_v4_octet_2[is_ipv4] <- octet_matrix[, 2]
-  res$ip_v4_octet_3[is_ipv4] <- octet_matrix[, 3]
-  res$ip_v4_octet_4[is_ipv4] <- octet_matrix[, 4]
+    res$ip_v4_octet_1[is_ipv4] <- octet_matrix[, 1]
+    res$ip_v4_octet_2[is_ipv4] <- octet_matrix[, 2]
+    res$ip_v4_octet_3[is_ipv4] <- octet_matrix[, 3]
+    res$ip_v4_octet_4[is_ipv4] <- octet_matrix[, 4]
 
-  res$ip_v4_octet1_has_leading_zero[is_ipv4] <- as.numeric(leading_zero_matrix[, 1])
-  res$ip_v4_octet2_has_leading_zero[is_ipv4] <- as.numeric(leading_zero_matrix[, 2])
-  res$ip_v4_octet3_has_leading_zero[is_ipv4] <- as.numeric(leading_zero_matrix[, 3])
-  res$ip_v4_octet4_has_leading_zero[is_ipv4] <- as.numeric(leading_zero_matrix[, 4])
+    res$ip_v4_octet_1_has_leading_zero[is_ipv4] <- as.numeric(leading_zero_matrix[, 1])
+    res$ip_v4_octet_2_has_leading_zero[is_ipv4] <- as.numeric(leading_zero_matrix[, 2])
+    res$ip_v4_octet_3_has_leading_zero[is_ipv4] <- as.numeric(leading_zero_matrix[, 3])
+    res$ip_v4_octet_4_has_leading_zero[is_ipv4] <- as.numeric(leading_zero_matrix[, 4])
 
-  res$ip_leading_zero_count[is_ipv4] <- rowSums(leading_zero_matrix)
-
+    res$ip_leading_zero_count[is_ipv4] <- rowSums(leading_zero_matrix)
+  }
 
   #######################
   ## Numeric conversions
   #v4
-  res$ip_v4_numeric_vector <- NA_integer_
 
-  res$ip_v4_numeric_vector[is_ipv4] <- (
-    octet_matrix[, 1] * 256^3 +
-      octet_matrix[, 2] * 256^2 +
-      octet_matrix[, 3] * 256 +
-      octet_matrix[, 4]
-  )
+  if(any(is_ipv4)) {
+    res$ip_v4_numeric_vector <- NA_integer_
 
-  #v6
-  # Important: This snippet assumes FULL (uncompressed) IPv6 strings (8 groups).
-  # WARNING: For large IPv6 addresses beyond 2^53, you lose precision.
-  hextet_list <- strsplit(ip_addresses[is_ipv6], ":")
+    res$ip_v4_numeric_vector[is_ipv4] <- (
+      octet_matrix[, 1] * 256^3 +
+        octet_matrix[, 2] * 256^2 +
+        octet_matrix[, 3] * 256 +
+        octet_matrix[, 4]
+    )
+  }
 
-  hextet_matrix <- do.call(rbind, lapply(hextet_list, function(x) {
-    as.integer(strtoi(x, base = 16L))
-  }))
+  if(any(is_ipv6)) {
+    #v6
+    # Important: This snippet assumes FULL (uncompressed) IPv6 strings (8 groups).
+    # WARNING: For large IPv6 addresses beyond 2^53, you lose precision.
+    hextet_list <- strsplit(ip_addresses[is_ipv6], ":")
 
-  res$ip_v6_numeric_approx_vector <- NA_integer_
-  res$ip_v6_numeric_approx_vector[is_ipv6] <- apply(hextet_matrix, 1, function(row) {
-    val <- 0
-    for (k in 1:8) {
-      val <- val * 65536 + row[k]
-    }
-    val
-  })
+    hextet_matrix <- do.call(rbind, lapply(hextet_list, function(x) {
+      as.integer(strtoi(x, base = 16L))
+    }))
+
+    res$ip_v6_numeric_approx_vector <- NA_integer_
+    res$ip_v6_numeric_approx_vector[is_ipv6] <- apply(hextet_matrix, 1, function(row) {
+      val <- 0
+      for (k in 1:8) {
+        val <- val * 65536 + row[k]
+      }
+      val
+    })
+  }
 
 
   #######################
@@ -248,16 +254,17 @@ extract_ip_features <- function(ip_addresses, error_on_invalid = FALSE) {
 
     res$ip_is_multicast <- as.numeric(iptools::is_multicast(ip_addresses))
 
-    temp <- iptools::hilbert_encode(res$ip_v4_numeric_vector[is_ipv4])
+    if(any(is_ipv4)) {
+      temp <- iptools::hilbert_encode(res$ip_v4_numeric_vector[is_ipv4])
 
-    res$ip_v4_hilbert_dim_1 <- NA
-    res$ip_v4_hilbert_dim_2 <- NA
+      res$ip_v4_hilbert_dim_1 <- NA
+      res$ip_v4_hilbert_dim_2 <- NA
 
-    res$ip_v4_hilbert_dim_1[is_ipv4] <- temp[, 1]
-    res$ip_v4_hilbert_dim_2[is_ipv4] <- temp[, 2]
+      res$ip_v4_hilbert_dim_1[is_ipv4] <- temp[, 1]
+      res$ip_v4_hilbert_dim_2[is_ipv4] <- temp[, 2]
 
+    }
   }
-
 
   return(res)
 }

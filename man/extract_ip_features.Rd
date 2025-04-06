@@ -25,7 +25,7 @@ A data frame with the following columns:
   \item{\code{ip_v4_octet4_has_leading_zero}}{An integer flag indicating whether the fourth octet includes a leading zero.}
   \item{\code{ip_leading_zero_count}}{An integer count of how many octets in an IPv4 address contain leading zeros.}
   \item{\code{ip_v4_numeric_vector}}{The 32-bit integer representation of an IPv4 address, computed as \eqn{(A * 256^3) + (B * 256^2) + (C * 256) + D}.}
-  \item{\code{ip_v6_numeric_approx_vector}}{An approximate numeric conversion of an IPv6 address. This value is computed from the eight hextets and is intended for interval comparisons only; precision may be lost for large values (above 2^{53}).}
+  \item{\code{ip_v6_numeric_approx_vector}}{An approximate numeric conversion of an IPv6 address. This value is computed from the eight hextets and is intended for interval comparisons only; precision may be lost for large values (above 2^53).}
   \item{\code{ip_is_palindrome}}{An integer value indicating whether the entire IP address string is a palindrome (i.e., it reads the same forwards and backwards).}
   \item{\code{ip_entropy}}{A numeric value representing the Shannon entropy of the IP address string, computed over the distribution of its characters. Higher entropy values indicate a more varied (less repetitive) pattern.}
   \item{\code{ip_is_multicast}}{An integer flag that indicates if the IP address falls within a multicast range.}
