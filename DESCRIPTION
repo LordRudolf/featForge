@@ -7,7 +7,6 @@ Depends: R (>= 3.5.0)
 Imports: stats, utils
 Suggests: 
     testthat (>= 3.0.0),
-    iptools,
     stringdist,
     Matrix
 License: MIT + file LICENSE
