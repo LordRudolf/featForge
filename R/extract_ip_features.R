@@ -247,24 +247,26 @@ extract_ip_features <- function(ip_addresses, error_on_invalid = FALSE) {
   #######################
   ## iptools package related features
 
-  if(!requireNamespace("iptools", quietly = TRUE)) {
-    warning("Package 'iptools' is not installed.
-             Several ip-features will not be created.")
-  } else {
+  ## Commented out as iptools package is not available at the moment
 
-    res$ip_is_multicast <- as.numeric(iptools::is_multicast(ip_addresses))
-
-    if(any(is_ipv4)) {
-      temp <- iptools::hilbert_encode(res$ip_v4_numeric_vector[is_ipv4])
-
-      res$ip_v4_hilbert_dim_1 <- NA
-      res$ip_v4_hilbert_dim_2 <- NA
-
-      res$ip_v4_hilbert_dim_1[is_ipv4] <- temp[, 1]
-      res$ip_v4_hilbert_dim_2[is_ipv4] <- temp[, 2]
-
-    }
-  }
+  # if(!requireNamespace("iptools", quietly = TRUE)) {
+  #   warning("Package 'iptools' is not installed.
+  #            Several ip-features will not be created.")
+  # } else {
+  #
+  #   res$ip_is_multicast <- as.numeric(iptools::is_multicast(ip_addresses))
+  #
+  #   if(any(is_ipv4)) {
+  #     temp <- iptools::hilbert_encode(res$ip_v4_numeric_vector[is_ipv4])
+  #
+  #     res$ip_v4_hilbert_dim_1 <- NA
+  #     res$ip_v4_hilbert_dim_2 <- NA
+  #
+  #     res$ip_v4_hilbert_dim_1[is_ipv4] <- temp[, 1]
+  #     res$ip_v4_hilbert_dim_2[is_ipv4] <- temp[, 2]
+  #
+  #   }
+  # }
 
   return(res)
 }
