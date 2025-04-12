@@ -49,7 +49,6 @@
 #' }
 #'
 #' @examples
-#' \dontrun{
 #' # Load the package's sample dataset
 #' data(featForge_sample_data)
 #'
@@ -59,7 +58,6 @@
 #'   extract_ip_features(featForge_sample_data$ip)
 #' )
 #' print(result)
-#' }
 #'
 #' @export
 extract_ip_features <- function(ip_addresses, error_on_invalid = FALSE) {

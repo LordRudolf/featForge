@@ -123,7 +123,6 @@ The function performs the following steps:
 }
 }
 \examples{
-\dontrun{
 # Example: Aggregate keyword features for PSD2 transactions.
 
 data(featForge_transactions)
@@ -158,6 +157,5 @@ result <- aggregate_psd2_keyword_features(
 # "casino_amount_direction_out",
 # "utilities_amount_direction_in", etc.
 result
-}
 
 }

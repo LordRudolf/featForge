@@ -91,7 +91,6 @@ When grouping is used, the resulting summary features are appended as new column
 by \code{period_missing_inputs}.
 }
 \examples{
-\dontrun{
 data(featForge_transactions)
 
 # Example 1: Aggregate outgoing transactions (amount < 0) on a monthly basis.
@@ -153,6 +152,5 @@ aggregate_applications(featForge_transactions,
                        ),
                        period = 'all'
 )
-}
 
 }

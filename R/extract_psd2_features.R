@@ -212,7 +212,6 @@ extract_basic_description_features <- function(descriptions) {
 #' }
 #'
 #' @examples
-#' \dontrun{
 #' # Load the sample transactions data.
 #' data(featForge_transactions)
 #'
@@ -235,7 +234,6 @@ extract_basic_description_features <- function(descriptions) {
 #'   period_agg = length,
 #'   period = c(30, 1)
 #' )
-#' }
 #'
 #' @export
 extract_keyword_features <- function(descriptions, min_freq = 1, use_matrix = TRUE, convert_to_df = TRUE) {
@@ -420,7 +418,6 @@ extract_keyword_features <- function(descriptions, min_freq = 1, use_matrix = TR
 #' }
 #'
 #' @examples
-#' \dontrun{
 #' # Example: Aggregate keyword features for PSD2 transactions.
 #'
 #' data(featForge_transactions)
@@ -455,7 +452,6 @@ extract_keyword_features <- function(descriptions, min_freq = 1, use_matrix = TR
 #' # "casino_amount_direction_out",
 #' # "utilities_amount_direction_in", etc.
 #' result
-#' }
 #'
 #' @export
 aggregate_psd2_keyword_features <- function(data,

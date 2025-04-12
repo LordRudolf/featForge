@@ -78,21 +78,19 @@ the client name (and surname) and the email username. If \code{stringdist} is no
 to the distance-based features.
 }
 \examples{
-\dontrun{
-  # Load sample data included in the package
-  data("featForge_sample_data")
+ # Load sample data included in the package
+ data("featForge_sample_data")
 
-  # Extract features from the sample emails
-  features <- extract_email_features(
-    emails = featForge_sample_data$email,
-    client_name = featForge_sample_data$client_name,
-    client_surname = featForge_sample_data$client_surname,
-    date_of_birth = featForge_sample_data$date_of_birth
-  )
+# Extract features from the sample emails
+ features <- extract_email_features(
+   emails = featForge_sample_data$email,
+   client_name = featForge_sample_data$client_name,
+   client_surname = featForge_sample_data$client_surname,
+   date_of_birth = featForge_sample_data$date_of_birth
+ )
 
-  # Display the first few rows of the resulting feature set
-  head(features)
-}
+# Display the first few rows of the resulting feature set
+head(features)
 
 }
 \seealso{

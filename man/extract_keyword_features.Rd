@@ -52,7 +52,6 @@ The function performs the following steps:
 }
 
 \examples{
-\dontrun{
 # Load the sample transactions data.
 data(featForge_transactions)
 
@@ -75,6 +74,5 @@ aggregate_applications(
   period_agg = length,
   period = c(30, 1)
 )
-}
 
 }

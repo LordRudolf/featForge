@@ -59,7 +59,6 @@ The function follows these steps:
 }
 }
 \examples{
-\dontrun{
 # Load the package's sample dataset
 data(featForge_sample_data)
 
@@ -69,6 +68,5 @@ result <- cbind(
   extract_ip_features(featForge_sample_data$ip)
 )
 print(result)
-}
 
 }

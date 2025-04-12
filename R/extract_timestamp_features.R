@@ -43,7 +43,6 @@
 #' }
 #'
 #' @examples
-#' \dontrun{
 #' # Load sample data
 #' data(featForge_sample_data)
 #'
@@ -60,11 +59,9 @@
 #' )
 #'
 #' head(result)
-#' }
 #'
 #' @return A data frame with the extracted timestamp features and birthday-related features (if \code{date_of_birth} is provided).
 #' @export
-
 extract_timestamp_features <- function(timestamps,
                                        date_of_birth = NULL,
                                        error_on_invalid = FALSE) {

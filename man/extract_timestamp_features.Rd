@@ -61,7 +61,6 @@ The function first validates the inputs and then extracts the following features
 }
 }
 \examples{
-\dontrun{
 # Load sample data
 data(featForge_sample_data)
 
@@ -78,6 +77,5 @@ result <- cbind(
 )
 
 head(result)
-}
 
 }

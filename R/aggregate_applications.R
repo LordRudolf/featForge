@@ -60,7 +60,6 @@
 #'   defined in \code{group_cols}.
 #'
 #' @examples
-#' \dontrun{
 #' data(featForge_transactions)
 #'
 #' # Example 1: Aggregate outgoing transactions (amount < 0) on a monthly basis.
@@ -122,7 +121,6 @@
 #'                        ),
 #'                        period = 'all'
 #' )
-#' }
 #'
 #' @export
 aggregate_applications <- function(data,
