@@ -28,9 +28,6 @@ A data frame with the following columns:
   \item{\code{ip_v6_numeric_approx_vector}}{An approximate numeric conversion of an IPv6 address. This value is computed from the eight hextets and is intended for interval comparisons only; precision may be lost for large values (above 2^53).}
   \item{\code{ip_is_palindrome}}{An integer value indicating whether the entire IP address string is a palindrome (i.e., it reads the same forwards and backwards).}
   \item{\code{ip_entropy}}{A numeric value representing the Shannon entropy of the IP address string, computed over the distribution of its characters. Higher entropy values indicate a more varied (less repetitive) pattern.}
-  \item{\code{ip_is_multicast}}{An integer flag that indicates if the IP address falls within a multicast range.}
-  \item{\code{ip_v4_hilbert_dim_1}}{The first coordinate (dimension 1) from applying Hilbert curve encoding to the numeric IPv4 address. This two-dimensional representation helps preserve the spatial locality of the IP addresses.}
-  \item{\code{ip_v4_hilbert_dim_2}}{The second coordinate (dimension 2) from the Hilbert curve encoding of the IPv4 address.}
 }
 }
 \description{
@@ -55,7 +52,6 @@ The function follows these steps:
       \item A palindrome check on the entire IP string.
       \item The Shannon entropy of the IP string to capture the diversity of characters.
     }
-  \item \strong{Multicast Detection:} The function checks if the IP falls in a multicast range.
 }
 }
 \examples{
